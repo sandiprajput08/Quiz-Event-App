@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Quiz & Events App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen flex flex-col">
+  <!-- Navigation -->
+  <nav class="bg-gradient-to-r from-blue-600 to-blue-800 text-white shadow-lg">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <!-- Logo -->
+        <a href="{% url 'home' %}" class="font-bold text-2xl text-white hover:text-blue-100 transition">
+          🎯 QuizEvents
+        </a>
+
+        <!-- Center Navigation Items -->
+        <div class="hidden md:flex items-center space-x-1">
+          <a href="{% url 'home' %}" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-500 transition">Home</a>
+          <a href="{% url 'quiz_list' %}" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-500 transition">Quizzes</a>
+          <a href="{% url 'event_list' %}" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-blue-500 transition">Events</a>
+          {% if user.is_superuser %}
+          <a href="/admin/" class="px-3 py-2 rounded-md text-sm font-medium hover:bg-purple-600 transition">Admin</a>
+          {% endif %}
+        </div>
+
+        <!-- Right Side: Account Dropdown + Username + Mobile Menu -->
+        <div class="flex items-center space-x-4">
+          <!-- Desktop Account Dropdown -->
+          <div class="hidden md:block relative group">
+            {% if user.is_authenticated %}
+              <!-- Logged In: Show Username -->
+              <button class="px-4 py-2 rounded-md text-sm font-medium bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 transition flex items-center space-x-2">
+                <span>👤 {{ user.username }}</span>
+              </button>
+              <!-- Dropdown Menu -->
+              <div class="absolute right-0 mt-0 w-48 bg-white text-gray-800 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                <a href="{% url 'quiz_history' %}" class="block px-4 py-2 text-sm hover:bg-gray-50 rounded-t-lg">📊 My History</a>
+                <form method="post" action="{% url 'logout' %}" class="block">
+                  {% csrf_token %}
+                  <button type="submit" class="w-full text-left px-4 py-2 text-sm hover:bg-red-100 text-red-600 font-semibold rounded-b-lg">🚪 Logout</button>
+                </form>
+              </div>
+            {% else %}
+              <!-- Not Logged In: Account Button -->
+              <button class="px-4 py-2 rounded-md text-sm font-medium bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 transition flex items-center space-x-2">
+                <span>👤 My Account</span>
+              </button>
+              <!-- Dropdown Menu -->
+              <div class="absolute right-0 mt-0 w-48 bg-white text-gray-800 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+                <a href="{% url 'login' %}" class="block px-4 py-2 text-sm hover:bg-gray-50 rounded-t-lg font-semibold">🔐 Login</a>
+                <a href="{% url 'signup' %}" class="block px-4 py-2 text-sm hover:bg-green-100 text-green-600 font-semibold rounded-b-lg">✨ Signup</a>
+              </div>
+            {% endif %}
+          </div>
+
+          <!-- Mobile menu button -->
+          <button id="mobile-menu-btn" class="md:hidden inline-flex items-center justify-center p-2 rounded-md text-white hover:bg-blue-700 focus:outline-none transition">
+            <svg class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Mobile menu -->
+      <div id="mobile-menu" class="hidden md:hidden pb-3 space-y-1">
+        <a href="{% url 'home' %}" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-blue-500 transition">Home</a>
+        <a href="{% url 'quiz_list' %}" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-blue-500 transition">Quizzes</a>
+        <a href="{% url 'event_list' %}" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-blue-500 transition">Events</a>
+        {% if user.is_superuser %}
+        <a href="/admin/" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-purple-600 transition">Admin</a>
+        {% endif %}
+
+        {% if user.is_authenticated %}
+          <a href="{% url 'quiz_history' %}" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-blue-500 transition">📊 My History</a>
+          <div class="block px-3 py-2 text-base font-bold text-center bg-gray-100 rounded-md">👤 {{ user.username }}</div>
+          <form method="post" action="{% url 'logout' %}" class="block">
+            {% csrf_token %}
+            <button type="submit" class="w-full text-left px-3 py-2 rounded-md text-base font-medium hover:bg-red-600 bg-red-500 transition text-white">🚪 Logout</button>
+          </form>
+        {% else %}
+          <a href="{% url 'login' %}" class="block px-3 py-2 rounded-md text-base font-medium hover:bg-blue-500 transition">🔐 Login</a>
+          <a href="{% url 'signup' %}" class="block px-3 py-2 rounded-md text-base font-medium bg-green-500 hover:bg-green-600 transition">✨ Signup</a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="flex-grow max-w-7xl mx-auto w-full py-8 px-4 sm:px-6 lg:px-8">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-gray-300 mt-12 py-8 border-t border-gray-700">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <p class="text-sm">© 2025 QuizEvents - Master your knowledge with engaging quizzes and events</p>
+      <p class="text-xs text-gray-500 mt-2">  CONTACT US - 📧 sandiprajput697@gmail.com</p>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    document.getElementById('mobile-menu-btn').addEventListener('click', function() {
+      const menu = document.getElementById('mobile-menu');
+      menu.classList.toggle('hidden');
+    });
+  </script>
+</body>
+</html>
