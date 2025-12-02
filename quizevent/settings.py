@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-*$hwj!idgwx5b+db4hig$jg1ygk#6iv%=jy=g*3pm8tilv3qr7
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["quiz-event-app.onrender.com"]
 
 
 # Application definition
@@ -124,3 +124,4 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
